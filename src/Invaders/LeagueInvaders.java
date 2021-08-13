@@ -16,6 +16,7 @@ public class LeagueInvaders {
 		f = new JFrame();
 		gp = new GamePanel();
 		setup(WIDTH, HEIGHT);
+		f.addKeyListener(gp);
 	}
 	
 	public void setup(int wid, int hei) {
