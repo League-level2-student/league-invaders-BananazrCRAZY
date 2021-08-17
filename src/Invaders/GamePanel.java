@@ -7,6 +7,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.image.BufferedImage;
+import javax.imageio.ImageIO;
 
 import javax.swing.JPanel;
 import javax.swing.Timer;
@@ -23,6 +24,7 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener{
 	Timer frameDraw;
 	Rocketship rship;
 	ObjectManager om;
+	Timer alienSpawn;
 	
 	public static BufferedImage image;
 	public static boolean needImage = true;
@@ -137,6 +139,11 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener{
 		        currentState = MENU;
 		    } else {
 		        currentState++;
+		        if (currentState == 1) {
+		        	startGame();
+		        }else if (currentState == 2) {
+		        	alienSpawn.stop();
+		        }
 		    }
 		}
 		// ship movement
@@ -160,6 +167,9 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener{
 		    	rship.down();
 		    }
 		}
+		if (e.getKeyCode()==KeyEvent.VK_SPACE) {
+			om.addProjectile(rship.GetProjectile());
+		}
 	}
 
 	@Override
@@ -178,5 +188,10 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener{
 	        }
 	        needImage = false;
 	    }
+	}
+	
+	void startGame() {
+		alienSpawn = new Timer(1000, om);
+		alienSpawn.start();
 	}
 }

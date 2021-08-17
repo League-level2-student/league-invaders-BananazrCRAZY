@@ -3,6 +3,7 @@ package Invaders;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
+import javax.imageio.ImageIO;
 
 public class Rocketship extends GameObject{
 	public static BufferedImage image;
@@ -39,6 +40,10 @@ public class Rocketship extends GameObject{
 	public void down() {
         y+=speed;
     }
+	
+	public Projectile GetProjectile() {
+		return new Projectile(x + width/2, y, 10, 10);
+	}
 	
 	void loadImage(String imageFile) {
 	    if (needImage) {
