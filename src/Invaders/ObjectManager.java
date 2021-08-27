@@ -11,6 +11,7 @@ public class ObjectManager implements ActionListener{
 	ArrayList<Projectile> projectiles = new ArrayList<Projectile>();
 	ArrayList<Alien> aliens = new ArrayList<Alien>();
 	Random ran = new Random();
+	int score = 0;
 
 	ObjectManager(Rocketship rship) {
 		this.rship = rship;
@@ -25,21 +26,30 @@ public class ObjectManager implements ActionListener{
 	}
 
 	void update() {
-		for (Alien a: aliens) {
-			if (a.y >= 704 && a.y <= 5) {
+		if (!rship.isActive) {
+			
+		}
+		for (int i = 0; i < aliens.size(); i++) {
+			Alien a = aliens.get(i);
+			if (a.x >= 690 || a.x <= -10 || a.y >= 820) {
 				a.isActive = false;
 			}
 			a.update();
-			PurgeObjects(aliens, a);
+			if (PurgeObjects(aliens, a)) {
+				i--;
+			}
 		}
-
-		for (Projectile p: projectiles) {
-			if (p.y >= 704 && p.y <= 5) {
+		for (int i = 0; i < projectiles.size(); i++) {
+			Projectile p = projectiles.get(i);
+			if (p.x >= 704 || p.x <= 5 || p.y <= -20) {
 				p.isActive = false;
 			}
 			p.update();
-			PurgeObjects(projectiles, p);
+			if (PurgeObjects(projectiles, p)) {
+				i--;
+			}
 		}
+		rship.update();
 		CheckCollision();
 	}
 
@@ -55,10 +65,12 @@ public class ObjectManager implements ActionListener{
 		rship.draw(g);
 	}
 
-	void PurgeObjects(ArrayList list, GameObject go) {
+	boolean PurgeObjects(ArrayList list, GameObject go) {
 		if (!go.isActive) {
 			list.remove(go);
+			return true;
 		}
+		return false;
 	}
 
 	@Override
@@ -76,12 +88,17 @@ public class ObjectManager implements ActionListener{
 				break;
 			}
 			for(int j = 0; j < projectiles.size(); j++){
-				Projectile p = projectiles.get(i);
+				Projectile p = projectiles.get(j);
 				if (p.collisionBox.intersects(a.collisionBox)) {
 					p.isActive = false;
 					a.isActive = false;
+					score++;
 				}
 			}
 		}
+	}
+	
+	public int getScore() {
+		return score;
 	}
 }

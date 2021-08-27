@@ -16,6 +16,7 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener{
 	final int MENU = 0;
 	final int GAME = 1;
 	final int END = 2;
+	final int INSTRUCTIONS = 3;
 	
 	int currentState = MENU;
 	Font titleFont;
@@ -52,6 +53,8 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener{
 		    drawGameState(g);
 		}else if(currentState == END){
 		    drawEndState(g);
+		} else if (currentState == INSTRUCTIONS) {
+			drawIntructionsState(g);
 		}
 	}
 	
@@ -60,11 +63,15 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener{
 	}
 	void UpdateGameState() {
 		om.update();
-	}
-	void UpdateEndState() {
 		if (!rship.isActive) {
 			currentState = END;
 		}
+	}
+	void UpdateEndState() {
+
+	}
+	void updateInstruState() {
+		
 	}
 	
 	void drawMenuState(Graphics g) {
@@ -98,6 +105,26 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener{
 		g.setFont(titleFont);
 		g.setColor(Color.BLACK);
 		g.drawString("GAMEOVER", 108, 143);
+		
+		g.setFont(titleFont);
+		g.drawString("SCORE: " + om.getScore(), 134, 450);
+	}
+	void drawIntructionsState(Graphics g) {
+		g.setColor(Color.MAGENTA);
+		g.fillRect(0, 0, LeagueInvaders.WIDTH, LeagueInvaders.HEIGHT);
+		
+		g.setFont(titleFont);
+		g.setColor(Color.YELLOW);
+		g.drawString("INSTRUCTIONS", 70, 143);
+		
+		g.setFont(instFont);
+		g.drawString("Press the ARROW KEYS to MOVE", 80, 350);
+		
+		g.setFont(instFont);
+		g.drawString("Press SPACE to SHOOT", 111, 525);
+		
+		g.setFont(instFont);
+		g.drawString("Press ENTER to CONTINUE", 100, 650);
 	}
 
 	@Override
@@ -109,6 +136,8 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener{
 		    UpdateGameState();
 		}else if(currentState == END){
 		    UpdateEndState();
+		} else if (currentState == INSTRUCTIONS) {
+			updateInstruState();
 		}
 		repaint();
 		
@@ -139,6 +168,10 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener{
 		if (e.getKeyCode()==KeyEvent.VK_ENTER) {
 		    if (currentState == END) {
 		        currentState = MENU;
+		        rship = new Rocketship(250, 700, 50, 50);
+		        om = new ObjectManager(rship);
+		    } else if (currentState == INSTRUCTIONS) {
+		    	currentState = MENU;
 		    } else {
 		        currentState++;
 		        if (currentState == 1) {
@@ -170,7 +203,11 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener{
 		    }
 		}
 		if (e.getKeyCode()==KeyEvent.VK_SPACE) {
-			om.addProjectile(rship.GetProjectile());
+			if (currentState == GAME) {
+				om.addProjectile(rship.GetProjectile());
+			} else if (currentState == MENU) {
+				currentState = INSTRUCTIONS;
+			}
 		}
 	}
 
