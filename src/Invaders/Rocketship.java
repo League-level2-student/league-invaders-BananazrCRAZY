@@ -5,6 +5,8 @@ import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import javax.imageio.ImageIO;
 
+import Invaders.Projectile;
+
 public class Rocketship extends GameObject{
 	public static BufferedImage image;
 	public static boolean needImage = true;

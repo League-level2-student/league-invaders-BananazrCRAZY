@@ -6,6 +6,8 @@ import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.Random;
 
+import Invaders.Projectile;
+
 public class ObjectManager implements ActionListener{
 	Rocketship rship;
 	ArrayList<Projectile> projectiles = new ArrayList<Projectile>();
